@@ -1,0 +1,117 @@
+body {
+background: #000428;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#staff_login_background {
+    background: #1c92d2;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f2fcfe, #1c92d2);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f2fcfe, #1c92d2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#suppliers_background {
+    background: #FF416C;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #FF4B2B, #FF416C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#clients_background {
+    background: #DAE2F8;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #D6A4A4, #DAE2F8);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #D6A4A4, #DAE2F8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.screen-center-title {
+    display: grid;
+    place-items: center;
+    margin-top: 10px;
+}
+
+.screen-center {
+    display: grid;
+    place-items: center;
+    margin-top: 80px;
+}
+
+#title {
+    color: white;
+    font-family: 'Dancing Script', cursive;
+}
+
+#login {
+    display: grid;
+    place-items: right;
+}
+
+.incorrect {
+ border: solid 4px red;
+}
+
+.skew-left {
+	transform: skew(10deg);
+}
+
+.skew-right {
+	transform: skew(-10deg);
+}
+
+.fondo_galactico {
+    background:url("robot_hand.jpg");
+    background-color: #cccccc;
+    height: calc( 22vh);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.working_out {
+    background:url("working_out.jpg");
+    background-color: #cccccc;
+    height: calc( 50vh);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.talisman {
+    background:url("talisman.jpg");
+    background-color: #cccccc;
+    height: calc( 22vh);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.photo_login_background {
+    background:url("login_background.jpg");
+    background-color: #cccccc;
+    height: calc( 100vh);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.photo_suppliers_login_background {
+    background:url("suppliers_login_background.jpg");
+    background-color: #cccccc;
+    height: calc( 100vh);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.staff_login_background {
+    background:url("staff_login_background.jpg");
+    background-color: #cccccc;
+    height: calc( 100vh);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}

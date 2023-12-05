@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyLittleBlueShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css" integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body id="staff_login_background">
+
+    <div class="container-fluid" style="color: white;">
+
+      <div class="row">
+        <div class="col col-md-12" style="text-align: right; margin-top:calc(10vh);">
+            <a href="/staff-space/return?id={{identification}}" style="text-decoration:none;">
+                <h1 class="screen-center-title mb-2" style="color: blue; font-size:45px;">
+                    Welcome to your private staff space, {{first_name}}!
+                </h1>
+            </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Here starts the sections for each type of staff user
+
+     Each type has one if structure to determine what he/she can see on the page:
+
+     -> Purchases section: from line 69 to 395
+     -> Production section: from line 413 to ...
+     -> Sales section: from 571 to ...
+
+     Modals from every section appear at the end of this file
+
+     -->
+
+    {% if department=="management" and access_level=="high" %}
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center" style="margin-top:80px;">
+            <div class="col col-md-9" style="text-align: center;">
+                <h2 class="text-center" style="color:black;">Root options</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center" style="margin-top:70px;">
+            <div class="col col-md-9" style="text-align: center;">
+
+                <div style="line-height: 45px; font-size: 30px;">
+                    <ul class="nav nav-pills nav-fill" style="background-color:black;">
+                      <li class="nav-item mx-auto">
+                            <a class="nav-link" style="color:white;" href="#make_deposit" data-bs-toggle="modal" data-bs-target="#make_deposit">
+                                Make deposit</a>
+                      </li>
+                      <li class="nav-item mx-auto">
+                            <a class="nav-link" style="color:white;" href="/create-new-staff-user">Create new user</a>
+                      </li>
+                      <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/staff-space/show-staff-users?id={{identification}}">Show staff users</a>
+                      </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Auxiliar messages section -->
+
+    {% if new_information_correctly_set_msg %}
+
+    <h3 class="text-center mt-5" style="color:cyan;">{{new_information_correctly_set_msg}}</h3>
+
+    {% endif %}
+
+    {% if correct_movement_msg %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{correct_movement_msg}}</h3>
+
+    {% endif %}
+
+    <!-- Table of staff users -->
+    {% if display_staff_users %}
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+        <div class="col col-md-11 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">First name</th>
+                  <th scope="col">Last name</th>
+                  <th scope="col">Department</th>
+                  <th scope="col">Access level</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for staff_user in list_of_staff_users: %}
+                <tr>
+                  <td class="align-middle">{{staff_user.staff_id}}</th>
+                  <td class="align-middle">{{staff_user.first_name}}</td>
+                  <td class="align-middle">{{staff_user.last_name}}</td>
+                  <td class="align-middle">{{staff_user.department}}</td>
+                  <td class="align-middle">{{staff_user.access_level}}</td>
+                  <td class="align-middle">
+                      <div class="form-row justify-content-center">
+                          <button class="btn btn-primary" style="margin-right:10px;">
+                              <a style="color:white;" href="/go-modify-account?id={{staff_user.id_user}}&user_type=staff&user_posing_request={{identification}}">
+                                Edit user
+                              </a>
+                          </button>
+                          <button class="btn btn-danger">
+                              <a style="color:white;" href="/staff-space/delete-staff-users?id={{identification}}&user_to_delete_id={{staff_user.id_user}}">
+                                Eliminate user
+                              </a>
+                          </button>
+                      </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+    </div>
+
+    {% endif %}
+
+    {% endif %}
+
+    {% if department=="management" or department=="purchases" %}
+
+    <div class="container-fluid" style="color: white;">
+
+        {% if department=="management" %}
+        <div class="row justify-content-center">
+            <div class="col col-md-9" style="text-align: center; ">
+                <h2 class="text-center" style="color:black; margin-top:100px;">Purchases options</h2>
+            </div>
+        </div>
+
+        {% endif %}
+
+        <div class="row justify-content-center">
+            <div class="col col-md-9" style="text-align: center; ">
+                {% if not department=="purchases" and not access_level=="low" %}
+                <h5>To validate a service click on its current number of validations</h5>
+                {% endif %}
+            </div>
+            <div class="col col-md-9 mt-3" style="text-align: center">
+                {% if not department=="purchases" and not access_level=="low" %}
+                <h5>To order a validated service clicks on its identification number</h5>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center" style="margin-top:70px;">
+            <div class="col col-md-9 mt-2" style="text-align: center;">
+                <div style="line-height: 45px; font-size: 30px">
+                <ul class="nav nav-pills nav-fill" style="background-color:black;">
+                  <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/staff-space/show_stocks?id={{identification}}">Show stocks</a>
+                  </li>
+                  <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/staff-space/show_movements?id={{identification}}">Show movements</a>
+                  </li>
+                  <li class="nav-item mx-auto">
+                    <a class="nav-link" style="color:white;" href="/staff-space/show-suppliers-to-validate?id={{identification}}">Show services</a>
+                  </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auxiliar messages section -->
+
+    {% if failed_to_validate_msg %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{failed_to_validate_msg}}</h3>
+
+    {% endif %}
+
+    {% if no_match_found_msg %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{no_match_found_msg}}</h3>
+
+    {% endif %}
+
+    {% if correct_movement_msg and department != "management" %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{correct_movement_msg}}</h3>
+
+    {% endif %}
+
+    {% if bought_service_msg %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{bought_service_msg}}</h3>
+
+    {% endif %}
+
+    {% if not_enough_total_msg %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{not_enough_total_msg}}</h3>
+
+    {% endif %}
+
+    {% if low_stock_msg != "" %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{low_stock_msg}}</h3>
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center ml-5 mr-5">
+            {% for material in missing_materials %}
+            <div class="col col-md-2" style="text-align: center">
+                <p class="text-center mt-5 d-inline" style="color:blue;">{{material}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% endif %}
+
+    {% if service_validated_msg %}
+
+    <h3 class="text-center mt-5" style="color:blue;">{{service_validated_msg}}</h3>
+
+        {% if validations==3 %}
+
+            <h3 class="text-center mt-5" style="color:green;">The service has been validated!</h3>
+
+        {% endif %}
+
+    {% endif %}
+
+    <!-- Stock table -->
+    {% if display_stock %}
+
+        <div class="container-fluid" style="color: white;">
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Distance Sensor RJ10</th>
+                  <th scope="col" style="font-size:15px;">LiDAR Sensor OSx</th>
+                  <th scope="col" style="font-size:15px;">Camera CVision33</th>
+                  <th scope="col" style="font-size:15px;">Servo XH10Standard</th>
+                  <th scope="col" style="font-size:15px;">Servo XH10Ultra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for key in key_list_by_row[0] %}
+                  <td style="font-size:20px;">{{stock_dictionary[key]}}
+                      <p class="d-inline" style="{% if capacity_dictionary[key]<(90) %}color: red;{% else %}color: cyan;{% endif %}">
+                          [{{capacity_dictionary[key]}}%]</p>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Servo XH20Ultra</th>
+                  <th scope="col" style="font-size:15px;">PCB-3x</th>
+                  <th scope="col" style="font-size:15px;">PCB-6x</th>
+                  <th scope="col" style="font-size:15px;">Engine Max12V</th>
+                  <th scope="col" style="font-size:15px;">Bodywork Type1</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for key in key_list_by_row[1] %}
+                  <td style="font-size:20px;">{{stock_dictionary[key]}}
+                      <p class="d-inline" style="{% if capacity_dictionary[key]<(90) %}color: red;{% else %}color: cyan;{% endif %}">
+                          [{{capacity_dictionary[key]}}%]</p>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Bodywork Type2</th>
+                  <th scope="col" style="font-size:15px;">Bodywork Type3</th>
+                  <th scope="col" style="font-size:15px;">Wire 5V</th>
+                  <th scope="col" style="font-size:15px;">Wire 12V</th>
+                  <th scope="col" style="font-size:15px;">LED 3.3V</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for key in key_list_by_row[2] %}
+                  <td style="font-size:20px;">{{stock_dictionary[key]}}
+                      <p class="d-inline" style="{% if capacity_dictionary[key]<(90) %}color: red;{% else %}color: cyan;{% endif %}">
+                          [{{capacity_dictionary[key]}}%]</p>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+         </div>
+
+    {% endif %}
+
+    <!-- Last movements table -->
+    {% if display_movements %}
+
+        <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+        <div class="col col-md-9 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Date</th>
+                  <th scope="col" style="font-size:15px;">Origin member</th>
+                  <th scope="col" style="font-size:15px;">Destination</th>
+                  <th scope="col" style="font-size:15px;">Amount</th>
+                  <th scope="col" style="font-size:15px;">Type</th>
+                  <th scope="col" style="font-size:15px;">Object</th>
+                  <th scope="col" style="font-size:15px;">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for movement in movements_list: %}
+                <tr  style="font-size:15px;">
+                  <th scope="row" style="font-size:15px;">{{movement.date}}</th>
+                  <td>{{movement.origin_staff_member}}</td>
+                  <td>{{movement.destination}}</td>
+                  <td>{{movement.amount}}</td>
+                  <td>{{movement.type}}</td>
+                  <td>{{movement.object}}</td>
+                  {% if movement == movements_list[0]: %}
+                    <td style="background-color:blue;">{{movement.total}}</td>
+                  {% else %}
+                    <td>{{movement.total}}</td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+         </div>
+
+    {% endif %}
+
+    <!-- Active services table -->
+    {% if display_services %}
+
+        <form action="/staff-space/show-suppliers-to-validate/applied-filters?id_user={{identification}}" method="post">
+          <div class="form-row justify-content-center mt-4">
+
+            <div class="form-group col-md-1">
+              <label style="color: white;">Service ID</label>
+              <input type="text" class="form-control" name="service_id">
+            </div>
+
+            <div class="form-group col-md-2">
+              <label style="color: white;">Supplier</label>
+              <select id="supplier_name" class="form-control" name="supplier_name">
+                  <option></option>
+                  {% for supplier_name in set_of_suppliers: %}
+                  <option value="{{supplier_name}}">{{supplier_name}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group col-md-2">
+              <label style="color: white;">Category</label>
+              <select id="service_category" class="form-control" name="category">
+                  <option></option>
+                  <option value="Sensor">Sensor</option>
+                  <option value="Servomechanism">Servomechanisms</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="3D printing">3D Printing</option>
+                  <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-1">
+              <label style="color: white;">Min Price</label>
+              <input type="text" class="form-control" name="min_price">
+            </div>
+
+            <div class="form-group col-md-1">
+              <label style="color: white;">Max Price</label>
+              <input type="text" class="form-control" name="max_price">
+            </div>
+
+            <div class="form-group col-md-2">
+              <label style="color: white;">State</label>
+              <select id="state_selector" class="form-control" name="state">
+                  <option></option>
+                  <option value="validated">Validated</option>
+                  <option value="not_validated">Pending validation</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-row justify-content-center mt-2">
+            <button type="submit" class="btn btn-primary">Apply filters</button>
+          </div>
+
+        </form>
+
+        <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+        <div class="col col-md-9 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Service ID</th>
+                  <th scope="col" style="font-size:15px;">Company Name</th>
+                  <th scope="col" style="font-size:15px;">Category</th>
+                  <th scope="col" style="font-size:15px;">Model</th>
+                  <th scope="col" style="font-size:15px;">Price</th>
+                  <th scope="col" style="font-size:15px;">Quantity</th>
+                  <th scope="col" style="font-size:15px;">Time to delivery</th>
+                  <th scope="col" style="font-size:15px;">Validations</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for service in list_of_services_to_validate: %}
+                <tr style="font-size:15px;">
+                  <th scope="row" style="font-size:15px;">
+                      {% set number_aux = service.validations | int %}
+                      {% if number_aux == 3 %}
+                      <a href="/staff-space/purchase-service?id_user={{identification}}&id_service={{service.id_service}}" style="color:cyan;">
+                      {{service.id_service}}
+                      </a>
+                      {% else %}
+                      {{service.id_service}}
+                      {% endif %}
+                  </th>
+                  <td>{{service.company_name}}</td>
+                  <td>{{service.category}}</td>
+                  <td>{{service.model}}</td>
+                  <td>{{service.price}}</td>
+                  <td>{{service.quantity}}</td>
+                  <td>{{service.delivery_time}}</td>
+                  {% set number = service.validations | int %}
+                  {% if number < 3 %}
+                  <td style="background-color:red;">
+                      {% if access_level=="low" %}
+                      <a>
+                          {{service.validations}}/3
+                      </a>
+                      {% else %}
+                      <a href="/staff-space/show-suppliers-to-validate/validate-service?id_user={{identification}}&id_service={{service.id_service}}">
+                          {{service.validations}}/3
+                      </a>
+                      {% endif %}
+                  </td>
+                  {% else %}
+                  <td style="background-color:green;">{{service.validations}}/3</td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+         </div>
+
+    {% endif %}
+
+    {% endif %}
+
+    {% if department=="management" or department=="production" %}
+
+    {% if department=="management" %}
+
+        <h2 class="text-center" style="color:black; margin-top:80px;">Production options</h2>
+
+    {% endif %}
+
+    <div class="container-fluid" style="color: white; margin-top:70px;">
+        <div class="row justify-content-center">
+            <div class="col col-md-9 mt-2" style="text-align: center; ">
+                <div style="line-height: 45px; font-size: 30px">
+                <ul class="nav nav-pills nav-fill" style="background-color:black;">
+                  {% if department=="production" %}
+                  <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/staff-space/show_stocks?id={{identification}}">Show stocks</a>
+                  </li>
+                  {% endif %}
+                  <li class="nav-item mx-auto">
+                      {% if access_level=="high" %}
+                        <a class="nav-link" style="color:white;" href="#manufacture_product" data-bs-toggle="modal" data-bs-target="#manufacture_product">
+                            Manufacture product</a>
+                      {% else %}
+                        <a class="nav-link" style="color:gray;">
+                            Manufacture product</a>
+                      {% endif %}
+                  </li>
+                  <li class="nav-item mx-auto">
+                    <a class="nav-link" style="color:white;" href="/staff-space/show-storehouse?id={{identification}}">Show storehouse</a>
+                  </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auxiliar messages section -->
+
+    {% if low_stock_msg != "" and not department=="management" %}
+
+    <h3 class="text-center mt-5" style="color:blue; margin-top:calc(5vh);">{{low_stock_msg}}</h3>
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center ml-5 mr-5">
+                {% for material in missing_materials %}
+                <div class="col col-md-2" style="text-align: center">
+                    <p class="text-center mt-5 d-inline" style="color:blue;">{{material}}</p>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+
+    {% endif %}
+
+    {% if insufficient_materials_msg %}
+
+    <h3 class="text-center mt-5" style="color:purple; margin-top:calc(5vh);">{{insufficient_materials_msg}}</h3>
+
+    <div class="container-fluid" style="color: white;">
+        {% for material in list_of_insufficient_materials %}
+        <div class="row justify-content-center">
+            <p class="text-center" style="color:blue;">{{material}}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+    {% if insufficient_money_msg %}
+
+    <h3 class="text-center" style="color:purple; margin-top:calc(5vh);">{{insufficient_money_msg}}</h3>
+
+    {% endif %}
+
+    {% if correctly_manufactured_process %}
+
+    <h3 class="text-center" style="color:blue; margin-top:calc(5vh);">{{correctly_manufactured_process}}</h3>
+
+    {% endif %}
+
+    {% if empty_storehouse_msg %}
+
+    <h3 class="text-center" style="color:blue; margin-top:calc(5vh);">{{empty_storehouse_msg}}</h3>
+
+    {% endif %}
+
+    <!-- Stock table -->
+    {% if display_stock and not department=="management" %}
+
+        <div class="container-fluid" style="color: white;">
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Distance Sensor RJ10</th>
+                  <th scope="col" style="font-size:15px;">LiDAR Sensor OSx</th>
+                  <th scope="col" style="font-size:15px;">Camera CVision33</th>
+                  <th scope="col" style="font-size:15px;">Servo XH10Standard</th>
+                  <th scope="col" style="font-size:15px;">Servo XH10Ultra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for key in key_list_by_row[0] %}
+                  <td style="font-size:20px;">{{stock_dictionary[key]}}
+                      <p class="d-inline" style="{% if capacity_dictionary[key]<(90) %}color: red;{% else %}color: cyan;{% endif %}">
+                          [{{capacity_dictionary[key]}}%]</p>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Servo XH20Ultra</th>
+                  <th scope="col" style="font-size:15px;">PCB-3x</th>
+                  <th scope="col" style="font-size:15px;">PCB-6x</th>
+                  <th scope="col" style="font-size:15px;">Engine Max12V</th>
+                  <th scope="col" style="font-size:15px;">Bodywork Type1</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for key in key_list_by_row[1] %}
+                  <td style="font-size:20px;">{{stock_dictionary[key]}}
+                      <p class="d-inline" style="{% if capacity_dictionary[key]<(90) %}color: red;{% else %}color: cyan;{% endif %}">
+                          [{{capacity_dictionary[key]}}%]</p>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Bodywork Type2</th>
+                  <th scope="col" style="font-size:15px;">Bodywork Type3</th>
+                  <th scope="col" style="font-size:15px;">Wire 5V</th>
+                  <th scope="col" style="font-size:15px;">Wire 12V</th>
+                  <th scope="col" style="font-size:15px;">LED 3.3V</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for key in key_list_by_row[2] %}
+                  <td style="font-size:20px;">{{stock_dictionary[key]}}
+                      <p class="d-inline" style="{% if capacity_dictionary[key]<(90) %}color: red;{% else %}color: cyan;{% endif %}">
+                          [{{capacity_dictionary[key]}}%]</p>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+         </div>
+
+    {% endif %}
+
+    <!-- Stock table -->
+    {% if display_storehouse %}
+
+        <div class="container-fluid" style="color: white;">
+
+        <div class="row justify-content-center">
+        <div class="col col-md-10 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Talisman T</th>
+                  <th scope="col" style="font-size:15px;">Overlord K</th>
+                  <th scope="col" style="font-size:15px;">Sentinel v10</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th style="font-size:20px;">
+                      {{storehouse_last_entry.talisman_t_total}}
+                  </th>
+                  <th style="font-size:20px;">
+                      {{storehouse_last_entry.overlord_k_total}}
+                  </th>
+                  <th style="font-size:20px;">
+                      {{storehouse_last_entry.sentinel_v10_total}}
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+
+         </div>
+
+    {% endif %}
+
+    {% endif %}
+
+    {% if department=="management" or department=="sales" %}
+
+    {% if department=="management" %}
+
+        <h2 class="text-center" style="color:black; margin-top:80px;">Sales options</h2>
+
+    {% endif %}
+
+    <div class="container-fluid" style="color: white; margin-top:70px; margin-bottom:calc(5vh);">
+        <div class="row justify-content-center">
+            <div class="col col-md-9 mt-2" style="text-align: center">
+                <div style="line-height: 45px; font-size: 30px">
+                <ul class="nav nav-pills nav-fill" style="background-color:black;">
+                  <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/staff-space/get-sales-info?id={{identification}}">Get sales info</a>
+                  </li>
+                  <li class="nav-item mx-auto">
+                      {% if access_level == "high" %}
+                        <a class="nav-link" style="color:white;" href="/staff-space/get-clients-info?id={{identification}}">
+                            Get clients info</a>
+                      {% else %}
+                        <a class="nav-link" style="color: gray;">Get clients info</a>
+                      {% endif %}
+                  </li>
+                  <li class="nav-item mx-auto">
+                    <a class="nav-link" style="color:white;" href="#set_up_prices" data-bs-toggle="modal" data-bs-target="#set_up_prices">
+                        Modify prices
+                    </a>
+                  </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auxiliar messages -->
+    {% if correctly_set_prices_msg %}
+
+    <h3 class="text-center mt-5" style="color:purple; margin-bottom:calc(2vh);">{{correctly_set_prices_msg}}</h3>
+
+    {% endif %}
+
+    {% if no_sales_to_show_msg %}
+
+    <h3 class="text-center mt-5" style="color:purple; margin-bottom:calc(2vh);">{{no_sales_to_show_msg}}</h3>
+
+    {% endif %}
+
+    {% if no_clients_to_show_msg %}
+
+    <h3 class="text-center mt-5" style="color:purple; margin-bottom:calc(2vh);">{{no_clients_to_show_msg}}</h3>
+
+    {% endif %}
+
+    <!-- Table of sales -->
+    {% if display_sales %}
+
+    <div class="container-fluid" style="color: white; margin-bottom:100px;">
+        <div class="row justify-content-center">
+        <div class="col col-md-9 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">ID Product</th>
+                  <th scope="col" style="font-size:15px;">Date</th>
+                  <th scope="col" style="font-size:15px;">Buyer</th>
+                  <th scope="col" style="font-size:15px;">Product</th>
+                  <th scope="col" style="font-size:15px;">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for sale in sales_list: %}
+                <tr style="font-size:15px;">
+                  <td>{{sale.id_product}}</th>
+                  <td>{{sale.date}}</td>
+                  <td>{{sale.buyer_user}}</td>
+                  <td>{{sale.product}}</td>
+                  <td>{{sale.price}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+    </div>
+
+    {% endif %}
+
+    <!-- Table of sales -->
+    {% if display_clients %}
+
+    <div class="container-fluid" style="color: white; margin-bottom:100px;">
+        <div class="row justify-content-center">
+        <div class="col col-md-11 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Date</th>
+                  <th scope="col" style="font-size:15px;">Product</th>
+                  <th scope="col" style="font-size:15px;">Username</th>
+                  <th scope="col" style="font-size:15px;">Date of Birth</th>
+                  <th scope="col" style="font-size:15px;">Country</th>
+                  <th scope="col" style="font-size:15px;">City</th>
+                  <th scope="col" style="font-size:15px;">Email</th>
+                  <th scope="col" style="font-size:15px;">Phone number</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for client in clients_info_list: %}
+                <tr style="font-size:15px;">
+                  <td>{{client.sale_date}}</th>
+                  <td>{{client.product_bought}}</td>
+                  <td>{{client.username}}</td>
+                  <td>{{client.date_of_birth}}</td>
+                  <td>{{client.country}}</td>
+                  <td>{{client.city}}</td>
+                  <td>{{client.email}}</td>
+                  <td>{{client.phone_number}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+    </div>
+
+    {% endif %}
+
+    {% endif %}
+
+    <!-- Modal for creating new service -->
+    <div class="modal fade" id="make_deposit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Make deposit</h5>
+            <button type="button" class="btn-close" style="color:red;" data-bs-dismiss="modal" aria-label="Close">x</button>
+          </div>
+          <div class="modal-body">
+              <div class="container-fluid">
+                  <form action="/staff-space/make-deposit?id={{identification}}" method="post">
+                      <div class="row mt-2">
+                          <div class="col-md-12">
+                            <label style="color: black;">Quantity of your deposit:</label>
+                            <input type="text" required class="form-control" name="deposit_quantity">
+                          </div>
+                      </div>
+                      <div class="form-row justify-content-center mt-4">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Create</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for manufacturing a product -->
+    <div class="modal fade" id="manufacture_product" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="Manufacture">Manufacture a product</h5>
+            <button type="button" class="btn-close" style="color:red;" data-bs-dismiss="modal" aria-label="Close">x</button>
+          </div>
+          <div class="modal-body">
+              <div class="container-fluid">
+                  <form action="/staff-space/manufacture-product?id={{identification}}" method="post">
+                      <div class="row mt-2">
+                          <div class="col-md-12">
+                            <label style="color: black;">Product to manufacture</label>
+                            <select id="product_name" required class="form-control" name="product_name">
+                              <option></option>
+                              <option value="Talisman T">Talisman T</option>
+                              <option value="Overlord K">Overlord K</option>
+                              <option value="Sentinel v10">Sentinel v10</option>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="row mt-2">
+                          <div class="col-md-12">
+                            <label style="color: black;">Quantity to manufacture</label>
+                            <input type="text" required class="form-control" name="product_quantity">
+                          </div>
+                      </div>
+                      <div class="form-row justify-content-center mt-4">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">GO!</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for setting up new prices -->
+    <div class="modal fade" id="set_up_prices" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="prices_header">Set new prices</h5>
+            <button type="button" class="btn-close" style="color:red;" data-bs-dismiss="modal" aria-label="Close">x</button>
+          </div>
+          <div class="modal-body">
+              <div class="container-fluid">
+                  <form action="/staff-space/setup-new_prices?id={{identification}}" method="post">
+                      <div class="row mt-2">
+                          <div class="col-md-12">
+                            <label style="color: black;">Talisman T price:</label>
+                            <input type="text" required class="form-control" name="talisman_t_price">
+                          </div>
+                      </div>
+                      <div class="row mt-2">
+                          <div class="col-md-12">
+                            <label style="color: black;">Overlord K price:</label>
+                            <input type="text" required class="form-control" name="overlord_k_price">
+                          </div>
+                      </div>
+                      <div class="row mt-2">
+                          <div class="col-md-12">
+                            <label style="color: black;">Sentinel v10 price:</label>
+                            <input type="text" required class="form-control" name="sentinel_v10_price">
+                          </div>
+                      </div>
+                      <div class="form-row justify-content-center mt-4">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abort</button>
+                          <button type="submit" class="btn btn-primary">Close new prices</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>

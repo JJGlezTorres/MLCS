@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyLittleBlueShop</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css" integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+
+</head>
+
+<body id="staff_login_background">
+
+    <h1 class="screen-center" style="color:yellow;">So you want to create a new staff user?</h1>
+
+    <form action="/create-new-staff-user/try-register" method="post">
+      <div class="form-row justify-content-center">
+        <div class="form-group col-md-3 mt-5">
+          <label style="color: black;">First Name</label>
+          <input type="text" required class="form-control" name="first_name">
+        </div>
+        <div class="form-group col-md-3 mt-5">
+          <label style="color: black;">Last Name</label>
+          <input type="text" required class="form-control" name="last_name">
+        </div>
+      </div>
+
+      <div class="form-row justify-content-center mt-5">
+        <div class="form-group col-md-3">
+          {% if repeated_id_msg!="" %}
+          <p class="text-center" style="color:red;">{{repeated_id_msg}}</p>
+          {% endif %}
+        </div>
+        <div class="form-group col-md-3">
+        </div>
+      </div>
+
+      <div class="form-row justify-content-center mt-2">
+        <div class="form-group col-md-3">
+          <label style="color: black;">Staff member ID</label>
+          <input type="text" required class="form-control" name="staff_id">
+        </div>
+        <div class="form-group col-md-3">
+          <label style="color: black;">Internal phone number</label>
+          <input type="text" required class="form-control" name="internal_phone_number">
+        </div>
+      </div>
+
+      <div class="form-row justify-content-center mt-2">
+        <div class="form-group col-md-3">
+          <label style="color: black;">Department</label>
+          <select id="Department_question" required class="form-control" name="department">
+              <option></option>
+              <option value="management">Management</option>
+              <option value="purchases">Purchases</option>
+              <option value="sales">Sales</option>
+              <option value="production">Production</option>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <label style="color: black;">Access Level</label>
+          <select id="Access_question" required class="form-control" name="level">
+              <option></option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+          </select>
+        </div>
+      </div>
+
+      {% if not_maching_passwords!="" %}
+
+      <p class="text-center mt-4" style="color:red;">{{not_maching_passwords}}</p>
+
+      {% endif %}
+
+      <div class="form-row justify-content-center mt-2">
+        <div class="form-group col-md-3">
+          <label style="color: black;">Password</label>
+          <input type="password" required class="form-control" name="password" minlength="8">
+        </div>
+        <div class="form-group col-md-3">
+          <label style="color: black;">Repeat password</label>
+          <input type="password" required class="form-control" name="repeated_password" minlength="8">
+        </div>
+      </div>
+
+      <div class="form-row justify-content-center mt-2">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+      </div>
+
+    </form>

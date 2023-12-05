@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyLittleBlueShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container-fluid fondo_galactico" style="height:calc( 40vh);">
+
+      <div class="row">
+        <div class="col col-md-6 mt-3" style="text-align: left;">
+            <a href="/user-login-page">
+                <button class="btn btn-primary">Customers login</button>
+            </a>
+        </div>
+        <div class="col col-md-6 mt-3" style="text-align: right">
+            <a href="/supplier-login-page">
+                <button class="btn btn-secondary">Suppliers login</button>
+            </a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col col-md-12 mt-1" style="text-align: right">
+            <a href="/login-page">
+                <h1 id="title" class="text-center mb-2" style="margin-top:calc(1vh); font-size: calc(10vh); letter-spacing:10px; text-shadow: 2px 2px 5px white;">
+                    <a href="/" style="color: #fffc86; text-decoration:none;">My Little Cobotics Shop</a>
+                </h1>
+            </a>
+            <h3 id="slogan" class="screen-center-title mb-2" style="margin-top:calc(2vh); font-size: calc(4vh); letter-spacing:10px; text-shadow: 2px 2px 5px white;">
+                <a href="/" style="color: black; text-decoration:none;">Let them in!</a>
+            </h3>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="line-height: 45px; font-size: 30px">
+    <ul class="nav nav-pills nav-fill" style="background-color:black;">
+      <li class="nav-item">
+        <a class="nav-link" style="color:white;" href="/about-us">About us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color:white;" href="/catalog">Catalog</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color:white;" href="/our-values">Our values</a>
+      </li>
+    </ul>
+    </div>
+
+    {% if not show_about_us and not show_catalog and not show_our_values %}
+
+    <div class="container" style="margin-top:calc(5vh); ">
+      <div class="row justify-content-center">
+        <div class="col-12" style="">
+          <p class="text-center" style="color:#fffc86; font-size:30px;">
+              This application is intended to provide
+              the fictional company "My Little Cobotics Shop" and its customers with an
+              environment to communicate and execute transactions in a
+              comfortable and fast way.
+          </p>
+        </div>
+      </div>
+      <div class="row justify-content-center" style="margin-top:calc(10vh);">
+        <div class="col-12" style="">
+          <h2 class="text-center" style="color:white; text-decoration-line:underline;">
+              Here's what you can do on this site:
+          </h2>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-4 mb-5">
+        <div class="col-9" style="">
+          <ul>
+              <li>
+                  <p style="color:violet; font-size:20px;" class="text-justify">
+                      Create a customer account and buy one of our products. We are sure you will be
+                      pleased to meet our dear guys: Talisman, Overlord and Sentinel!
+                  </p>
+              </li>
+              <li>
+                  <p style="color:cyan; font-size:20px;" class="text-justify">
+                      Create a supplier account and show what your company's got! You will be able to offer
+                      your services and when validated, we will purchase them!
+                  </p>
+              </li>
+              <li>
+                  <p style="color:orange; font-size:20px;" class="text-justify">
+                      If you are a member of our company, you can go to <a href="/staff-login-page" style="color:orange; font-size:20px;">
+                      the staff login page</a> to log in. Depending on your department, you will be able to carry out some
+                      actions or some others. In case you are from the management department and have a high access level, well...
+                      You are the boss! You can do whatever: validate services, purchase them, manufacture products,
+                      see information about our sales and clients, modify prices and also create new staff
+                      users!
+                  </p>
+              </li>
+            </ul>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12" style="margin-top:calc(10vh); margin-bottom:calc(5vh)">
+          <p class="text-center" style="color:#fffc86; font-size:15px;">
+              This web application was intended to be a merely academic project for the course in
+              Python programming of the academy Tokio School. The name of the company as well as any other
+              name in this app either of the application, products or default users are purely fictional and
+              do not try to represent any real person, institution or organization.
+          </p>
+          <p class="text-center" style="color:#fffc86; font-size:15px;">
+              The information required to create users, especially in the case of clients, is particularly
+              personal, such as the credit card number. Though this application will only work on your
+              personal machine, it is strongly recommended not to use any real information.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+    {% if show_about_us %}
+
+    <div class="container" style="margin-top:calc(10vh); ">
+      <div class="row justify-content-center">
+        <div class="col-12" style="">
+          <h2 class="text-center" style="color:#fffc86">
+              Author's note
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="margin-top:calc(5vh); margin-bottom:calc(10vh);">
+      <div class="row justify-content-center">
+        <div class="col-9" style="font-size:20px;">
+          <p style="color:white;">
+              Dear user,
+          </p>
+        </div>
+        <div class="col-9" style="font-size:20px;">
+          <p class="text-justify" style="color:white;">
+              <br>My name is Juan José González Torres, I'm the author of this humble project. I
+              would like to talk to you first to ask for your excuse if you encountered
+              any bugs or malfunctions while exploring this application. I'm an aerospace engineering
+              student and, though I have always found programming extremely attractive, I hadn't the
+              chance to deepen much into this wonderful field during my degree.
+          </p>
+          <p class="text-justify" style="color:white;">
+              <br>However, I recently decided it was time to seriously delve into it. Then, I
+              joined a very interesting academy called Tokio School, and I have had the chance to
+              widely spread my knowledge about Python. If you add this to my fondness for robotics,
+              this is the result! I have really enjoyed working on this app, and it has led me to discover
+              a lot of fancy things about this amazing language.
+          </p>
+          <p class="text-justify" style="color:white;">
+              <br>That is all for my part. I hope you find this site interesting. Now come on,
+              create some users here and there, and try to buy yourself some cool cobots! Sincerely,
+          </p>
+          <p class="text-justify" style="color:white;">
+              <br>Juan José González Torres
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+    {% if show_catalog %}
+
+    <div class="container-fluid" style="margin-top:100px;">
+        <div class="row align-items-center justify-content-center skew-left">
+            <div class="col-4 text-center">
+                <h2 style="color:#fffc86;">Talisman T</h2>
+                <h4 style="color:violet; font-style:italic">This is Talisman, say hello! See? Nothing to envy to a flesh and bound pet!</h4>
+                <p style="font-size:20px; color:white;">
+                    Take care of it! Name it, feed it, play with it, give it some good hugs, and teach it! Yes,
+                    you will be surprised at how many tricks it can learn...</p>
+            </div>
+            <div class="col-4">
+                <div class="card mx-auto d-block" style="width: 18rem; background-color:violet;">
+                  <img class="card-img-top" src="/static/talisman.jpg" alt="Card image cap">
+                  <div class="card-body text-center">
+                    <p class="card-text" style="color:white;">Price: {{prices_list[0]}}$</p>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top:150px;">
+        <div class="row align-items-center justify-content-center skew-right">
+            <div class="col-4">
+                <div class="card mx-auto d-block" style="width: 18rem; background-color:cyan;">
+                  <img class="card-img-top" src="/static/overlord.jpg" alt="Card image cap">
+                  <div class="card-body text-center">
+                    <p class="card-text" style="color:black;">Price: {{prices_list[1]}}$</p>
+                  </div>
+                </div>
+            </div>
+            <div class="col-4 text-center">
+                <h2 style="color:#fffc86;">Overlord K</h2>
+                <h4 style="color:cyan; font-style:italic">"Yes, monsieur! What could I do for you?"</h4>
+                <p style="font-size:20px; color:white;">
+                    That's the purpose of this robot! Do you want it to do laundry for you? To prepare a cocktail
+                    for you? To answer your emails for you? Well, it can! So stop wasting your time and let this cobot do
+                    all your daily tasks for you!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top:150px; margin-bottom:100px;">
+        <div class="row align-items-center justify-content-center skew-left">
+            <div class="col-4 text-center">
+                <h2 style="color:#fffc86;">Sentinel v10</h2>
+                <h4 style="color:orange; font-style:italic">"Sentinel at your service, sir! Vigilant and ready for the action!"</h4>
+                <p style="font-size:20px; color:white;">
+                    This tough guy will
+                    protect your home from unwanted visits by watching your perimeter and calling the police in any out-of-the-ordinary situation.
+                </p>
+            </div>
+            <div class="col-4">
+                <div class="card mx-auto d-block" style="width: 18rem; background-color:orange;">
+                  <img class="card-img-top" src="/static/sentinel.jpg" alt="Card image cap">
+                  <div class="card-body text-center">
+                    <p class="card-text" style="color:white;">Price: {{prices_list[2]}}$</p>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+    {% if show_our_values %}
+
+    <div class="container" style="margin-top:calc(5vh); ">
+      <div class="row justify-content-center">
+        <div class="col-12" style="">
+          <h2 class="text-center" style="color:#fffc86">
+              This web project has been created in 2023. We still have a long way
+              in front of us before we can go on the Internet and buy robots to be our pets,
+              help us or protect us. Then, let's move forward in time and imagine we are some
+              decades ahead...
+          </h2>
+        </div>
+      </div>
+      <div class="row justify-content-center" style="margin-top:50px; margin-bottom:50px;">
+        <div class="col-12" style="">
+          <h4 class="text-justify" style="color:white">
+              <br>My Little Cobotics Shop was created to make people's life easier, by counting on intelligent machines
+              able to help them, either with its company as pets, or with their daily tasks or
+              protecting their homes at night. As long as (needless to say) all these points do
+              not enter in conflict with any of Isaac Asimov's Three Laws of Robotics:
+          </h4>
+        </div>
+        <div class="col-9" style="font-size:20px;">
+          <p class="text-justify" style="color:violet;">
+              <br>1. A robot may not injure a human being or, through inaction, allow a human being
+              to come to harm.
+          </p>
+          <p class="text-justify" style="color:cyan;">
+              <br>2. A robot must obey the orders given it by human beings, except where such
+              orders would conflict with the First Law.
+          </p>
+          <p class="text-justify" style="color:orange;">
+              <br>3. A robot must protect its own existence as long as such protection does not
+              conflict with the First or the Second Laws.
+          </p>
+        </div>
+        <div class="col-12" style="margin-top:calc(5vh);">
+          <h4 class="text-justify" style="color:white">
+              <br>From this point forward, our commitment is clear: we work to bring cobots to
+              reality, making them more intelligent, more helpful and safer day by day.
+          </h4>
+        </div>
+        <div class="col-12" style="margin-top:calc(1vh);margin-bottom:calc(1vh);">
+          <p class="text-justify" style="color:white">
+              The Cobotic's CEO* (*No one)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+</body>
+</html>

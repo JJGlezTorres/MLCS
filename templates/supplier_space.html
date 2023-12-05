@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyLittleBlueShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css" integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+
+</head>
+
+<body id="suppliers_background">
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+            <div class="col col-md-9 mt-3" style="text-align: center">
+                  <a href="/supplier-space/return?id={{identification}}" style="text-decoration:none;">
+                    <h1 class="text-center" style="color:yellow; margin-top:calc( 10vh);">
+                        Welcome to your private supplier space, {{supplier_name}}!
+                    </h1>
+                  </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+            <div class="col col-md-10 mt-3" style="text-align: center">
+                <div style="line-height: 45px; font-size: 30px" class="mt-5">
+                    <ul class="nav nav-pills nav-fill" style="background-color:black;">
+                      <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/supplier-space/see-my-services?id={{identification}}">My services</a>
+                      </li>
+                      <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="#create_new_service" data-bs-toggle="modal" data-bs-target="#create_new_service">
+                            Create new service</a>
+                      </li>
+                      <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/supplier-space/see-requested-services?id={{identification}}">Requested orders</a>
+                      </li>
+                      <li class="nav-item mx-auto">
+                        <a class="nav-link" style="color:white;" href="/go-modify-account?id={{identification}}&user_type=supplier">Modify account info</a>
+                      </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auxiliar messages section -->
+
+    {% if successfully_created_service_msg %}
+
+    <h3 class="text-center mt-5" style="color:cyan;">{{successfully_created_service_msg}}</h3>
+
+    {% endif %}
+
+    {% if new_information_correctly_set_msg %}
+
+    <h3 class="text-center mt-5" style="color:cyan;">{{new_information_correctly_set_msg}}</h3>
+
+    {% endif %}
+
+    {% if no_services_offered_msg!="" %}
+
+    <h3 class="text-center mt-5" style="color:cyan;">{{no_services_offered_msg}}</h3>
+
+    {% endif %}
+
+    {% if no_services_executed_msg!="" %}
+
+    <h3 class="text-center mt-5" style="color:cyan;">{{no_services_executed_msg}}</h3>
+
+    {% endif %}
+
+    {% if display_services %}
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+        <div class="col col-md-9 mt-4" style="text-align: center">
+
+            <table class="table table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Service ID</th>
+                  <th scope="col" style="font-size:15px;">Category</th>
+                  <th scope="col" style="font-size:15px;">Model</th>
+                  <th scope="col" style="font-size:15px;">Price</th>
+                  <th scope="col" style="font-size:15px;">Quantity</th>
+                  <th scope="col" style="font-size:15px;">Time to delivery</th>
+                  <th scope="col" style="font-size:15px;">Validations</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for service in list_of_suppliers_services: %}
+                <tr style="font-size:15px;">
+                  <th scope="row" style="font-size:15px;">{{service.id_service}}</th>
+                  <td>{{service.category}}</td>
+                  <td>{{service.model}}</td>
+                  <td>{{service.price}}</td>
+                  <td>{{service.quantity}}</td>
+                  <td>{{service.delivery_time}}</td>
+                  {% set number = service.validations | int %}
+                  {% if number < 3 %}
+                  <td style="background-color:red;">{{service.validations}}/3</td>
+                  {% else %}
+                  <td style="background-color:green;">{{service.validations}}/3</td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+    </div>
+
+    {% endif %}
+
+    {% if display_executed_services %}
+
+    <div class="container-fluid" style="color: white;">
+        <div class="row justify-content-center">
+        <div class="col col-md-9 mt-4" style="text-align: center; color: white;">
+
+            <table class="table table-striped" style="color: white;">
+              <thead>
+                <tr>
+                  <th scope="col" style="font-size:15px;">Service ID</th>
+                  <th scope="col" style="font-size:15px;">Date</th>
+                  <th scope="col" style="font-size:15px;">Model</th>
+                  <th scope="col" style="font-size:15px;">Price</th>
+                  <th scope="col" style="font-size:15px;">Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for service in list_of_executed_services: %}
+                <tr style="font-size:15px;">
+                  <th scope="row" style="font-size:15px;">{{service.id_service}}</th>
+                  <td>{{service.date}}</td>
+                  <td>{{service.model}}</td>
+                  <td>{{service.price}}</td>
+                  <td>{{service.quantity}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+         </div>
+         </div>
+    </div>
+
+    {% endif %}
+
+    <!-- Modal for creating new service -->
+    <div class="modal modal-dialog modal-dialog-centered fade" id="create_new_service" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create new service</h5>
+            <button type="button" class="btn-close" style="color:red;" data-bs-dismiss="modal" aria-label="Close">x</button>
+          </div>
+          <div class="modal-body">
+              <div class="container-fluid">
+                  <form action="/supplier-space/try-service-register?id={{identification}}" method="post">
+                      <div class="row mt-2">
+                          <div class="col-md-6">
+                            <label style="color: black;">Model name</label>
+                            <select id="model" required class="form-control" name="model">
+                              <option></option>
+                              <option value="Distance Sensor RJ10">Distance Sensor RJ10</option>
+                              <option value="LiDAR Sensor OSx">LiDAR Sensor OSx</option>
+                              <option value="Camera CVision33">Camera CVision33</option>
+                              <option value="Servo XH10Standard">Servo XH10Standard</option>
+                              <option value="Servo XH10Ultra">Servo XH10Ultra</option>
+                              <option value="Servo XH20Ultra">Servo XH20Ultra</option>
+                              <option value="PCB-3x">PCB-3x</option>
+                              <option value="PCB-6x">PCB-6x</option>
+                              <option value="Engine Max12V">Engine Max12V</option>
+                              <option value="Bodywork Type1">Bodywork Type1</option>
+                              <option value="Bodywork Type2">Bodywork Type2</option>
+                              <option value="Bodywork Type3">Bodywork Type3</option>
+                              <option value="Wire 5V">Wire 5V</option>
+                              <option value="Wire 12V">Wire 12V</option>
+                              <option value="LED 3.3V">LED 3.3V</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <label style="color: black;">Price</label>
+                            <input type="text" required class="form-control" name="price">
+                          </div>
+                      </div>
+                      <div class="row mt-2">
+                          <div class="col-md-6">
+                            <label style="color: black;">Quantity</label>
+                            <input type="text" required class="form-control" name="quantity">
+                          </div>
+                          <div class="col-md-6">
+                            <label style="color: black;">Delivery time</label>
+                            <input type="text" required class="form-control" name="delivery_time">
+                          </div>
+                      </div>
+                      <div class="form-row justify-content-center mt-4">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Create</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>
